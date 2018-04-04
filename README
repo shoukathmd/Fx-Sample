@@ -1,0 +1,541 @@
+---
+
+# A typtical Fx project has two components.
+  Fxfile.yaml   # Contains job & environment details.
+  test-suites   # This directory contains one or more test suite files.
+
+
+################ Sample Fxfile.yaml ################
+
+  version: '1'
+
+  name: Fx
+  environments:
+    - name: Default
+      baseUrl: http://dev.fxlabs.io/api/v1
+      auths:
+        - name: Default
+          authType: BASIC
+          username: user1
+          password: user1
+  jobs:
+    - name: Default
+      environment: Default
+      tags:
+        - V1
+      region: fx-default-queue
+
+################ End of Fxfile.yaml ################
+
+
+################ Sample test-suite -> test-suites/users_create.yml ############
+
+endpoint: /users
+
+description:
+
+type: SUITE
+
+init:
+  - data_init1
+
+auth: default
+
+method: POST
+
+headers:
+  - 'Content-Type: application/json'
+  - 'Accept: application/json'
+
+testCases:
+  - id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": "fx", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": "fx", "jobTitle": "Engineer"}'
+  # optional name
+  -  id: 1
+    body: '{"name": "", "username": "u1", "email": "e1@fx.local", "company": "fx", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": " ", "username": "u1", "email": "e1@fx.local", "company": "fx", "jobTitle": "Engineer"}'
+  # optional company
+  -  id: 1
+    body: '{"name": "", "username": "u1", "email": "e1@fx.local", "company": " ", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": " ", "username": "u1", "email": "e1@fx.local", "company": "", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": " ", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": "", "jobTitle": "Engineer"}'
+  # optional jobTitle
+  -  id: 1
+    body: '{"name": "", "username": "u1", "email": "e1@fx.local", "company": " ", "jobTitle": ""}'
+  -  id: 1
+    body: '{"name": " ", "username": "u1", "email": "e1@fx.local", "company": "", "jobTitle": " "}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": " ", "jobTitle": ""}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": "", "jobTitle": " "}'
+
+assertions:
+  - "@StatusCode == 200"
+  - "@Response.errors == false"
+  - "@Response.data.name == @Request.name"
+  - "@Response.data.username ==IgnoreCase @Request.username"
+  - "@Response.data.email == @Request.email"
+  - "@Response.data.company == @Request.company"
+  - "@Response.data.jobTitle == @Request.jobTitle"
+
+cleanup:
+  - user_delete
+
+tags:
+  - V1
+  - DEV3
+
+policies:
+  logger: DEBUG
+  repeatOnFailure: 0
+  repeat: 0
+  repeatDelay: 3000
+  timeoutSeconds: 5
+  initExec: Request
+  cleanupExec: Request
+
+########################## End ################################################
+
+
+
+######################## Explanation of Fxfile.yaml ###########################
+  version: '1'            # fx schema version defaults to '1'.
+
+  # App name
+  name: Fx
+
+  # Marketplace injections.
+  # Usage - {{@USName | firstname}} inject into json requests
+  imports:
+    '@USName': FxLabs/Common/US-Names
+
+  # Environments - represents one or more instance of App (e.g. Dev, QE, Stg, Prod etc).
+  environments:
+    - name: Default     # App environment name (Always should have one 'Default')
+      baseUrl: http://localhost:8080/api/v1  # App environment Base URL
+      # app access credentials
+      auths:
+        - name: Default                      # Auth name (Always should have one 'Default')
+          # e.g. 1 (BASIC)
+          authType: BASIC                    # (e.g. BASIC, BasicAuth, OAuth_2_0 etc)
+          username: user1                    # Username or accessKey
+          password: user1                    # Password or secretKey
+          # e.g. 2 (OAuth 2.0)
+        - name: Stg
+          authType: OAuth_2_0
+          grantType: password                # (e.g. authorization_code, implicit, client_credentials, password)
+          username: peter@example.com        # Optional - Only applies if grantType == password
+          password: password                 # Optional - Only applies if grantType == password
+          clientId: gigy                     #
+          clientSecret: secret               #
+          id: some-id                        # Optional | unique random string
+          accessTokenUri: http://<>/token    #
+          userAuthorizationUri:              # Optional
+          clientAuthenticationScheme: form   # (e.g. form,header,none,query)
+          authorizationScheme: form          # (e.g. form,header,none,query)
+          scope: read,write
+          # e.g. 3 (Vault injection)
+        - name: Dev
+          authType: BASIC
+          username: admin@fxlabs.io
+          password: '{{@Vault.FxLabs/DevMachinePassword}}' # 'FxLabs/DevMachinePassword' is Vault Key (org/key).
+
+
+  # job profiles
+  jobs:                                      # Job - represents the runnable configuration
+    - name: Default                          # Job name
+      environment: Default                   # environment name from the environments list.
+      tags:                                  # tags - filters test-suites by tag.
+        - V1
+      region: fx-default-queue               # region - represents the Fx Bot region
+                                             # check 'Bot Hub' service for available
+                                             # regions on the Control-Plane (UI).
+      cron: '0 30 * ? * *'                   # Optional cron expression
+      issueTracker: FxLabs/Stg-GitHub-Bot    # Launch a issueTracker bot and inject into a job.
+                                             # The bot will auto file/close bugs failed tests.
+
+################################ End  #########################################
+
+
+
+################ Explanation test-suites/users_create.yml ################
+
+
+# Note - Order is not important.
+
+# endpoint - represents the API Endpoint. The base-url value comes from the Fxfile
+endpoint: /users
+
+description:
+
+# Suite type - SUITE or ABSTRACT
+#   ABSTRACT - is not directly excuted but can be injected into other suites 'init' & 'cleanup' sections.
+type: SUITE
+
+init:
+  - data_init1
+  - data_init2
+
+
+# auth - refers to auth defined in the Fxfile
+# If not defined defaults to 'Default' auth.
+# If auth is set to 'NONE' then no auth is used when executing requests
+auth: default
+
+# method - represents the API http method (GET, PUT, POST, DELETE etc)
+method: POST
+
+# headers - represents request headers - when missing these two headers are auto set ('Content-Type: application/json', 'Accept: application/json')
+headers:
+  - 'Content-Type: application/json'
+  - 'Accept: application/json'
+
+
+# testCases - group one or more api requests.
+testCases:
+  - id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": "fx", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": "fx", "jobTitle": "Engineer"}'
+  # optional name
+  -  id: 1
+    body: '{"name": "", "username": "u1", "email": "e1@fx.local", "company": "fx", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": " ", "username": "u1", "email": "e1@fx.local", "company": "fx", "jobTitle": "Engineer"}'
+  # optional company
+  -  id: 1
+    body: '{"name": "", "username": "u1", "email": "e1@fx.local", "company": " ", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": " ", "username": "u1", "email": "e1@fx.local", "company": "", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": " ", "jobTitle": "Engineer"}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": "", "jobTitle": "Engineer"}'
+  # optional jobTitle
+  -  id: 1
+    body: '{"name": "", "username": "u1", "email": "e1@fx.local", "company": " ", "jobTitle": ""}'
+  -  id: 1
+    body: '{"name": " ", "username": "u1", "email": "e1@fx.local", "company": "", "jobTitle": " "}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": " ", "jobTitle": ""}'
+  -  id: 1
+    body: '{"name": "fn1 ln", "username": "u1", "email": "e1@fx.local", "company": "", "jobTitle": " "}'
+
+# assertions - One or more assertions.
+# All needs to be true for the test-case to pass.
+assertions:
+  - "@StatusCode == 200"
+  - "@Response.errors == false"
+  - "@Response.data.name == @Request.name"
+  - "@Response.data.username ==IgnoreCase @Request.username"
+  - "@Response.data.email == @Request.email"
+  - "@Response.data.company == @Request.company"
+  - "@Response.data.jobTitle == @Request.jobTitle"
+
+# cleanup - excutes one or more abstract suites per request or per suite.
+cleanup:
+  - user_delete
+  - org_delete
+
+# tags - jobs can filter test-suites based on the tags.
+tags:
+  - V1
+  - DEV3
+
+# Optional policies
+policies:
+  logger: DEBUG # DEBUG | ERROR
+  repeatOnFailure: 0
+  repeat: 0
+  repeatDelay: 3000
+  timeoutSeconds: 5
+  initExec: Request # Request | Suite
+  cleanupExec: Request # Request | Suite
+
+################ End of Sample test-suit file ################
+
+
+
+## 1. Entity - Keywords
+  - @Request
+  - @StatusCode
+  - @ResponseHeaders
+  - @Response
+  - @NULL
+  - @EMPTY
+  - @ResponseTime
+  - @ResponseSize
+
+## 2. Data-Injection - Keywords
+  - @Random
+  - @RandomAlphabetic
+  - @RandomAlphanumeric
+  - @RandomNumeric
+  - @Date
+  - @RandomUUID
+  - @Vault                # Inject values from Vault e.g. {{@Vault.org/key}} {{@Vault.FxLabs/MyPass}}
+  - @*                    # Marketplace injections e.g. define the below 'imports' in Fxfile.yaml
+                          # imports:
+                          #  '@USName': FxLabs/Common/US-Names
+                          #  '@USCC': FxLabs/Common/US-CreditCards
+                          #
+                          #  e.g. usage {{@USName | firstname}} or {{@USName | lastname}}
+                          #  e.g. usage {{@USCC | type}} or {{@USCC | no}} {{@USCC | exp}} {{@USCC | cvv}}
+
+## 3. Comparision - Keywords
+  - ==
+  - ==IgnoreCase
+  - !=
+  - >
+  - <
+  - >=
+  - <=
+  - =~
+  - !=~
+  - startsWith
+  - startsWithIgnoreCase
+  - endsWith
+  - endsWithIgnoreCase
+
+## 4. Transformation - Keywords
+  - trim
+  - trimToNull
+  - trimToEmpty
+  - truncate
+  - strip
+  - indexOf
+  - indexOfIgnoreCase
+  - lastIndexOf
+  - left
+  - right
+  - substringBefore
+  - substringAfter
+  - substringBeforeLast
+  - substringAfterLast
+  - substringBetween
+  - removeStart
+  - removeStartIgnoreCase
+  - removeEnd
+  - removeEndIgnoreCase
+  - remove
+  - removeIgnoreCase
+  - removeAll
+  - removeFirst
+  - removePattern
+  - chomp
+  - chop
+  - repeat
+  - rightPad
+  - leftPad
+  - upperCase
+  - lowerCase
+  - capitalize
+  - uncapitalize
+  - reverse
+
+## 5. JsonPath supported entities
+  - @Request
+  - @Response
+
+
+## Data-Injection examples
+
+  # Injects random 6 chars.
+  {"name": "fn1 ln", "username": "{{@Random}}"}
+
+  # Injects random 4 chars as prefix.
+  {"name": "fn1 ln", "email": "{{@Random | 4}}@fx.local"}
+
+  # Injects random 6 alphabet chars.
+  {"name": "fn1 ln", "email": "{{@RandomAlphabetic}}@fx.local"}
+
+  # Injects random 24 alphabet chars.
+  {"name": "fn1 ln", "email": "{{@RandomAlphabetic | 24}}@fx.local"}
+
+  # Injects random 6 numeric chars.
+  {"name": "fn1 ln", "email": "{{@RandomAlphanumeric}}@fx.local"}
+
+  # Injects random 8 numeric chars.
+  {"name": "fn1 ln", "email": "{{@RandomAlphanumeric | 8}}@fx.local"}
+
+  # Injects date.
+  {"name": "fn1 ln", "dob": "{{@Date}}"}
+
+  # Inject date in the format
+  {"name": "fn1 ln", "dob": "{{@Date | yyMMddHHmmssZ}}"}
+
+  # Injects UUID.
+  {"name": "fn1 ln", "id": "{{@RandomUUID}}"}
+
+
+## JsonPath examples in assertions ##
+  "@Response.data.name == @Request.name"
+  "@Response.data.email == @Request.email"
+
+## Comparision Keywords examples in assertions ##
+  # == (equals)
+  "@StatusCode == 200"
+  "@Response.data.name == @Request.name"
+
+  # ==IgnoreCase (equals ignore case)
+  "@Response.data.email ==IgnoreCase @Request.email"
+
+  # != (not equals)
+  "@Response.data.password != @Request.password"
+  "@StatusCode != 500"
+
+  # > (greater than)
+  "@Response.age > 21"
+
+  # < (less than)
+  "@Response.age < 21"
+
+  # >= (greater than or equal)
+  "@Response.age >= 21"
+
+  # <= (less than or equal)
+  "@Response.age <= 21"
+
+  # =~ (regex)
+  # Tells whether or not this string matches the given
+  # Regex doc - https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#sum
+  "@Request.email =~ *@gmail.com"
+
+  # !=~ (negate of regex)
+  "@Request.email !=~ *@gmail.com"
+
+  # startsWith (starts with)
+  "@Request.email startsWith Bob"
+
+  # startsWithIgnoreCase (starts with ignore case)
+  "@Request.email startsWithIgnoreCase Bob"
+
+  # endsWith (ends with)
+  "@Request.email endsWith gmail.com"
+
+  # endsWithIgnoreCase (ends with ignore case)
+  "@Request.email endsWith Gmail.com"
+
+
+## Entity Injection examples in assertions ##
+  # - @NULL
+  @Request.name == @NULL
+
+  # - @EMPTY
+  @Request.name == @EMPTY
+
+  # - @ResponseTime (milliseconds)
+  @ResponseTime <= 1000
+
+  # - @ResponseSize (bytes)
+  @ResponseSize <= 1024
+
+## Transformation support examples ##
+
+  # - trim - removes leading and trailing whitespace
+  {{@Request.username | trim}}
+
+  # - trimToNull - removes leading and trailing whitespace and may return null
+  {{@Request.username | trimToNull}}
+
+  # - trimToEmpty - removes leading and trailing whitespace and may return ''
+  {{@Request.username | trimToEmpty}}
+
+  # - truncate - Truncates '1234567890' to '12345'
+  {{@Request.username | truncate 5}}
+
+  # - strip
+  # - indexOf - Returns the index within seq of the first occurrence
+  {{@Request.email | indexOf @}}
+
+  # - indexOfIgnoreCase
+  # - lastIndexOf - Returns the index within seq of the last occurrence
+  {{@Request.email | lastIndexOf @}}
+
+  # - left - Gets the leftmost len characters of a String.
+  {{@Request.email | left 5}}
+
+  # - right - Gets the rightmost len characters of a String.
+  {{@Request.email | right 5}}
+
+  # - substringBefore - Gets the substring before the first occurrence of a separator
+  {{@Request.email | substringBefore @}}
+
+  # - substringAfter - Gets the substring after the first occurrence of a separator
+  {{@Request.email | substringBefore @}}
+
+  # - substringBeforeLast
+
+  # - substringAfterLast
+
+  # - substringBetween
+
+  # - removeStart - Removes a substring only if it is at the beginning of a source string
+
+  # - removeStartIgnoreCase
+
+  # - removeEnd
+
+  # - removeEndIgnoreCase
+
+  # - remove - Removes all occurrences of a substring from within the source string
+  {{@Request.username | remove @}}
+
+  # - removeIgnoreCase
+
+  # - removeAll
+
+  # - removeFirst
+
+  # - removePattern
+
+  # - chomp
+
+  # - chop
+
+  # - repeat - Repeat a String repeat times to form a new String
+  {{@Request.username | repeat 2}}
+
+  # - rightPad - Right pad a String with spaces
+  {{@Request.username | rightPad 10}}
+
+  # - leftPad - Left pad a String with spaces
+  {{@Request.username | leftPad 10}}
+
+  # - upperCase - Converts a String to upper case
+  {{@Request.username | upperCase}}
+
+  # - lowerCase - Converts a String to lower case
+  {{@Request.username | lowerCase}}
+
+  # - capitalize
+
+  # - uncapitalize
+
+  # - reverse - Reverses a String
+  {{@Request.username | reverse}}
+
+## Data Injection examples across suites support
+
+  # In assertions
+  # Org_Create_Init - refers to the Init script item.
+  # Org_Create_Init_Request - refers to the Request json of the init script.
+  # Org_Create_Init_Request.name - JsonPath of name attribute on the request.
+  # @Response - refers to the Suite test-case response.
+  # @Response.org.name - refers to the JsonPath of response.
+  - "@Org_Create_Init_Request.name == @Response.org.name"
+
+  # Injection in endpoint attribute of the Suite.
+  # With transformations
+  # Org_Create_Init - refers to the Init script item.
+  # Org_Create_Init_Headers - refers to the response Headers of init script.
+  # Org_Create_Init_Headers.location - refers to the location attribute in Headers
+  # substringAfterLast / - extracts the value after the last '/' in location attribute
+  endpoint: /hotels/{{@Org_Create_Init_Headers.location | substringAfterLast /}}

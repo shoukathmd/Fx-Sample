@@ -1,0 +1,63 @@
+
+---
+version: '1'
+
+# App (Project) name
+name: Fx-Sample
+
+# App description
+description: Fx Testing.
+
+# license
+licenses:
+  - APACHE LICENSE, VERSION 2.
+
+imports:
+  '@USName': FxLabs/Common/US-Names
+
+# App environments
+environments:
+  - name: Stg
+    baseUrl: http://stg1.fxlabs.io/api/v1
+    # app access credentials
+    auths:
+      - name: Default
+        authType: BASIC
+        username: admin@fxlabs.io
+        password: '{{@Vault.FxLabs/Stg-Admin-Pass}}'
+  - name: Local
+    baseUrl: http://localhost:8080/api/v1
+    # app access credentials
+    auths:
+      - name: Default
+        authType: BASIC
+        username: admin@fxlabs.io
+        password: '{{@Vault.FxLabs/DevMachinePassword}}'
+  - name: Dev
+    baseUrl: http://localhost:8080/api/v1
+    # app access credentials
+    auths:
+      - name: Default
+        authType: BASIC
+        username: admin@fxlabs.io
+        password: '{{@Vault.FxLabs/DevMachinePassword}}'
+# Job profiles
+jobs:
+  - name: Stg
+    environment: Stg
+    tags:
+      - V1
+    regions: FxLabs/US_WEST_1
+    cron: '0 30 * ? * *'
+    #issueTracker: FxLabs/Stg-GitHub-Bot
+  - name: Local
+    environment: Local
+    tags:
+      - V1
+    regions: FxLabs/US_WEST_1
+    issueTracker: FxLabs/IT-Test
+  - name: SANDBOX
+    environment: Dev
+    tags:
+      - SANDBOX
+    regions: FxLabs/US_WEST_1
