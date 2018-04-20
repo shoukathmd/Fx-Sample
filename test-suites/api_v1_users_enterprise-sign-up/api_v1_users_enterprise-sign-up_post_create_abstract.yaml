@@ -1,0 +1,25 @@
+---
+parent: "api_v1_users_enterprise-sign-up"
+name: "api_v1_users_enterprise-sign-up_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/users/enterprise-sign-up"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"accountNonExpired\":null,\"accountNonLocked\":null,\"company\":null,\"\
+    credentialsNonExpired\":null,\"email\":null,\"enabled\":null,\"inactive\":null,\"\
+    jobTitle\":null,\"location\":null,\"name\":null,\"password\":null,\"privileges\"\
+    :[],\"username\":null}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

@@ -1,0 +1,19 @@
+---
+parent: "api_v1_test-suites_search_keyword"
+name: "api_v1_test-suites_search_keyword_get_anonymous_invalid"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/test-suites/search/{keyword}"
+method: "GET"
+auth: "NONE"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode == 401"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

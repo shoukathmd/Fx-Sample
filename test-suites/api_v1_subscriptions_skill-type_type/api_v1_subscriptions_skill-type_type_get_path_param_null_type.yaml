@@ -1,0 +1,19 @@
+---
+parent: "api_v1_subscriptions_skill-type_type"
+name: "api_v1_subscriptions_skill-type_type_get_path_param_null_type"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/subscriptions/skill-type/null"
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

@@ -1,0 +1,25 @@
+---
+parent: "api_v1_projects_add"
+name: "api_v1_projects_add_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/projects/add"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"branch\":null,\"description\":null,\"genPolicy\":null,\"inactive\":null,\"\
+    lastCommit\":null,\"name\":null,\"openAPISpec\":null,\"org\":{\"inactive\":null,\"\
+    name\":null},\"password\":null,\"projectId\":null,\"projectType\":null,\"url\"\
+    :null,\"username\":null,\"visibility\":null}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

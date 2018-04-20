@@ -1,0 +1,19 @@
+---
+parent: "api_v1_orgs_orgid_users_add-member"
+name: "api_v1_orgs_orgid_users_add-member_post_auth_invalid"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/orgs/{orgId}/users/add-member"
+method: "POST"
+auth: "INVALID_AUTH"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode == 401"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

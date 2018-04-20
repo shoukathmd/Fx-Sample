@@ -1,0 +1,27 @@
+---
+parent: "api_v1_clusters"
+name: "api_v1_clusters_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/clusters"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"cloudAccount\":{\"accessKey\":null,\"cloudType\":null,\"inactive\":null,\"\
+    name\":null,\"org\":{\"inactive\":null,\"name\":null},\"region\":null,\"secretKey\"\
+    :null,\"visibility\":null},\"cloudType\":null,\"driver\":null,\"inactive\":null,\"\
+    key\":null,\"live\":null,\"max\":null,\"min\":null,\"name\":null,\"nodeId\":null,\"\
+    org\":{\"inactive\":null,\"name\":null},\"region\":null,\"status\":null,\"visibility\"\
+    :null}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

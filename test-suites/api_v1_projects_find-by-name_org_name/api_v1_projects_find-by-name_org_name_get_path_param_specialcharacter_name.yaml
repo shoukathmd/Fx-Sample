@@ -1,0 +1,19 @@
+---
+parent: "api_v1_projects_find-by-name_org_name"
+name: "api_v1_projects_find-by-name_org_name_get_path_param_specialcharacter_name"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/projects/find-by-name/{org}/!@#$%^&*()"
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

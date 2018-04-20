@@ -1,0 +1,19 @@
+---
+parent: "api_v1_data-record"
+name: "api_v1_data-record_get_query_param_max_int_pageSize"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/data-record?pageSize=2147483647"
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

@@ -1,0 +1,19 @@
+---
+parent: "api_v1_dashboard_count-time"
+name: "api_v1_dashboard_count-time_get_query_param_negative_page"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/dashboard/count-time?page=-1"
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

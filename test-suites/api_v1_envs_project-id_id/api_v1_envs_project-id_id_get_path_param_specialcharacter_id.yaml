@@ -1,0 +1,19 @@
+---
+parent: "api_v1_envs_project-id_id"
+name: "api_v1_envs_project-id_id_get_path_param_specialcharacter_id"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/envs/project-id/!@#$%^&*()"
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

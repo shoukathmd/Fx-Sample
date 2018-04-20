@@ -1,0 +1,19 @@
+---
+parent: "api_v1_runs_id_test-suite-responses"
+name: "api_v1_runs_id_test-suite-responses_get_path_param_empty_string_id"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/runs//test-suite-responses"
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

@@ -1,0 +1,19 @@
+---
+parent: "api_v1_subscriptions_issue-tracker-bot_id"
+name: "api_v1_subscriptions_issue-tracker-bot_id_delete_delete_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/subscriptions/issue-tracker-bot/{{@api_v1_subscriptions_issue-tracker-bot_post_create_abstract_Response.id}}"
+method: "DELETE"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

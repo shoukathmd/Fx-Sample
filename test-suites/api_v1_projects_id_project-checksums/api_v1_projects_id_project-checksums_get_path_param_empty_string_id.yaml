@@ -1,0 +1,19 @@
+---
+parent: "api_v1_projects_id_project-checksums"
+name: "api_v1_projects_id_project-checksums_get_path_param_empty_string_id"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/projects//project-checksums"
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

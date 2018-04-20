@@ -1,0 +1,23 @@
+---
+parent: "api_v1_vault"
+name: "api_v1_vault_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/vault"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"description\":null,\"inactive\":null,\"key\":null,\"org\":{\"inactive\"\
+    :null,\"name\":null},\"val\":null,\"visibility\":null}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

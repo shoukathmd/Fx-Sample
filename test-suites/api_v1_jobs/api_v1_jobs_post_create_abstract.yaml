@@ -1,0 +1,25 @@
+---
+parent: "api_v1_jobs"
+name: "api_v1_jobs_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/jobs"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"cron\":null,\"description\":null,\"environment\":null,\"inactive\":null,\"\
+    issueTracker\":null,\"name\":null,\"nextFire\":null,\"notifications\":[],\"project\"\
+    :{\"inactive\":null,\"name\":null,\"org\":{\"inactive\":null,\"name\":null}},\"\
+    refId\":null,\"regions\":null,\"tags\":[]}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

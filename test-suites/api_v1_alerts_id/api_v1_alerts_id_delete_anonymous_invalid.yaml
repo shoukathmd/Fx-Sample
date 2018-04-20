@@ -1,0 +1,19 @@
+---
+parent: "api_v1_alerts_id"
+name: "api_v1_alerts_id_delete_anonymous_invalid"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/alerts/{id}"
+method: "DELETE"
+auth: "NONE"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode == 401"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

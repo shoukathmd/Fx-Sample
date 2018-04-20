@@ -1,0 +1,28 @@
+---
+parent: "api_v1_test-suites"
+name: "api_v1_test-suites_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/test-suites"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"assertions\":[],\"auth\":null,\"authors\":[],\"cleanup\":[],\"description\"\
+    :null,\"endpoint\":null,\"headers\":[],\"inactive\":null,\"init\":[],\"method\"\
+    :null,\"name\":null,\"parent\":null,\"policies\":{\"cleanupExec\":null,\"initExec\"\
+    :null,\"logger\":null,\"repeat\":null,\"repeatDelay\":null,\"repeatOnFailure\"\
+    :null,\"timeoutSeconds\":null},\"project\":{\"inactive\":null,\"name\":null,\"\
+    org\":{\"inactive\":null,\"name\":null}},\"props\":null,\"publishToMarketplace\"\
+    :null,\"tags\":[],\"testCases\":[],\"type\":null}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

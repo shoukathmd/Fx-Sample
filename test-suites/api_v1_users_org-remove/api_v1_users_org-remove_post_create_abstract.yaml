@@ -1,0 +1,24 @@
+---
+parent: "api_v1_users_org-remove"
+name: "api_v1_users_org-remove_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/users/org-remove"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"inactive\":null,\"org\":{\"inactive\":null,\"name\":null},\"orgRole\"\
+    :null,\"status\":null,\"users\":{\"company\":null,\"inactive\":null,\"name\":null,\"\
+    username\":null}}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

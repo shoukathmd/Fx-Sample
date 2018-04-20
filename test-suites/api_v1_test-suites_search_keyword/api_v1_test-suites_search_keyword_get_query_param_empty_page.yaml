@@ -1,0 +1,19 @@
+---
+parent: "api_v1_test-suites_search_keyword"
+name: "api_v1_test-suites_search_keyword_get_query_param_empty_page"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/test-suites/search/{keyword}?page="
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

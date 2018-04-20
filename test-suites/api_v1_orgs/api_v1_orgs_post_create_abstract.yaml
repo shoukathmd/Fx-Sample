@@ -1,0 +1,23 @@
+---
+parent: "api_v1_orgs"
+name: "api_v1_orgs_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/orgs"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"billingEmail\":null,\"company\":null,\"description\":null,\"inactive\"\
+    :null,\"location\":null,\"name\":null,\"orgPlan\":null,\"orgType\":null}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

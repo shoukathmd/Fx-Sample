@@ -1,0 +1,25 @@
+---
+parent: "api_v1_subscriptions_issue-tracker-bot"
+name: "api_v1_subscriptions_issue-tracker-bot_post_create_abstract"
+description: null
+type: "ABSTRACT"
+endpoint: "/api/v1/subscriptions/issue-tracker-bot"
+method: "POST"
+auth: ""
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases:
+- id: 1
+  body: "{\"description\":null,\"inactive\":null,\"name\":null,\"opts\":[],\"org\"\
+    :{\"inactive\":null,\"name\":null},\"prop1\":null,\"prop2\":null,\"prop3\":null,\"\
+    prop4\":null,\"prop5\":null,\"skill\":{\"inactive\":null,\"name\":null},\"state\"\
+    :null,\"visibility\":null}"
+  inactive: false
+assertions:
+- "@StatusCode == 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

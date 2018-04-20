@@ -1,0 +1,19 @@
+---
+parent: "api_v1_cloud-accounts"
+name: "api_v1_cloud-accounts_get_query_param_negative_pageSize"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/cloud-accounts?pageSize=-1"
+method: "GET"
+auth: "BASIC"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode != 200"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false

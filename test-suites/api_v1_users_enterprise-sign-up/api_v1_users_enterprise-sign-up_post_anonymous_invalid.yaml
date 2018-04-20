@@ -1,0 +1,19 @@
+---
+parent: "api_v1_users_enterprise-sign-up"
+name: "api_v1_users_enterprise-sign-up_post_anonymous_invalid"
+description: null
+type: "SUITE"
+endpoint: "/api/v1/users/enterprise-sign-up"
+method: "POST"
+auth: "NONE"
+headers:
+- "Accept: application/json"
+- "Content-Type: application/json"
+testCases: []
+assertions:
+- "@StatusCode == 401"
+tags:
+- "V1"
+authors:
+- "FX Bot"
+inactive: false
